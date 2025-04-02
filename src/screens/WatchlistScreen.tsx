@@ -25,12 +25,10 @@ const WatchlistScreen: React.FC = () => {
     }
   };
 
-  // Sort watchlist items by date added (most recent first)
   const sortedWatchlist = useMemo(() => {
     return [...watchlist].sort((a, b) => (b.addedAt ?? 0) - (a.addedAt ?? 0));
   }, [watchlist]);
 
-  // Custom empty component for Watchlist
   const renderEmptyList = () => {
     if (isWatchlistLoading) {
       return <LoadingIndicator />;

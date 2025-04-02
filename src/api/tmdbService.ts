@@ -39,10 +39,8 @@ const apiFetch = async <T extends unknown>(endpoint: string, queryParams: QueryP
   }
 };
 
-// --- Movie Endpoints --- 
 
 export const getPopularMovies = (page: number = 1): Promise<MovieListResponse> => {
-  // Keep this simple for the default popular view
   return apiFetch<MovieListResponse>('/movie/popular', { page });
 };
 
@@ -50,7 +48,6 @@ export const getTopRatedMovies = (page: number = 1): Promise<MovieListResponse> 
   return apiFetch<MovieListResponse>('/movie/top_rated', { page });
 };
 
-// Add discover endpoint for filtering/sorting
 export const discoverMovies = (page: number = 1, sortBy?: string, withGenres?: string): Promise<MovieListResponse> => {
   const params: QueryParams = { page };
   if (sortBy) {
@@ -70,10 +67,8 @@ export const getMovieWatchProviders = (movieId: number): Promise<WatchProviderRe
     return apiFetch<WatchProviderResponse>(`/movie/${movieId}/watch/providers`);
 };
 
-// --- TV Show Endpoints --- 
 
 export const getPopularTVShows = (page: number = 1): Promise<TVShowListResponse> => {
-  // Keep simple for default popular view
   return apiFetch<TVShowListResponse>('/tv/popular', { page });
 };
 
@@ -81,7 +76,6 @@ export const getTopRatedTVShows = (page: number = 1): Promise<TVShowListResponse
   return apiFetch<TVShowListResponse>('/tv/top_rated', { page });
 };
 
-// Add discover endpoint for filtering/sorting
 export const discoverTVShows = (page: number = 1, sortBy?: string, withGenres?: string): Promise<TVShowListResponse> => {
   const params: QueryParams = { page };
   if (sortBy) {
@@ -90,7 +84,6 @@ export const discoverTVShows = (page: number = 1, sortBy?: string, withGenres?: 
   if (withGenres) {
       params.with_genres = withGenres;
   }
-  // Use discover/tv endpoint
   return apiFetch<TVShowListResponse>('/discover/tv', params);
 };
 
@@ -102,17 +95,14 @@ export const getTVShowWatchProviders = (tvShowId: number): Promise<WatchProvider
     return apiFetch<WatchProviderResponse>(`/tv/${tvShowId}/watch/providers`);
 };
 
-// --- Search Endpoint (Combined) --- 
 
 export const searchContent = (query: string, page: number = 1): Promise<SearchListResponse> => {
   if (!query) {
       return Promise.resolve({ page: 1, results: [], total_pages: 0, total_results: 0 });
   }
-  // Use multi search endpoint which includes media_type in results
   return apiFetch<SearchListResponse>('/search/multi', { query, page });
 };
 
-// --- Genre Endpoints --- 
 
 export const getMovieGenres = (): Promise<GenreListResponse> => {
   return apiFetch<GenreListResponse>('/genre/movie/list');

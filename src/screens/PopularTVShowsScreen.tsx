@@ -9,9 +9,8 @@ import { RootStackParamList } from '../navigation/AppNavigator';
 import { FONTS, SIZES, COLORS } from '../styles/theme';
 import GenrePickerModal from '../components/GenrePickerModal';
 
-// Use the RootStackParamList as TVShows tab is inside the stack
 type PopularTVShowsScreenNavigationProp = NativeStackNavigationProp<RootStackParamList>;
-type SortOption = 'popularity' | 'rating' | 'first_air_date'; // Use first_air_date for TV
+type SortOption = 'popularity' | 'rating' | 'first_air_date';
 
 const PopularTVShowsScreen: React.FC = () => {
   const [contentItems, setContentItems] = useState<ContentItem[]>([]); 
@@ -22,16 +21,15 @@ const PopularTVShowsScreen: React.FC = () => {
   const [totalPages, setTotalPages] = useState<number>(1);
   const navigation = useNavigation<PopularTVShowsScreenNavigationProp>();
   const [fetchingPage, setFetchingPage] = useState<number | null>(null);
-  const [sortOption, setSortOption] = useState<SortOption>('popularity'); // Default to popularity
+  const [sortOption, setSortOption] = useState<SortOption>('popularity');
   const [availableGenres, setAvailableGenres] = useState<Genre[]>([]);
   const [selectedGenreId, setSelectedGenreId] = useState<number | null>(null);
   const [isGenreModalVisible, setIsGenreModalVisible] = useState<boolean>(false);
 
-  // Fetch available genres on mount
   useEffect(() => {
     const fetchGenres = async () => {
       try {
-        const genreData = await getTVGenres(); // Fetch TV genres
+        const genreData = await getTVGenres();
         setAvailableGenres(genreData.genres);
       } catch (err) {
         console.error("Failed to fetch TV genres:", err);
@@ -40,11 +38,10 @@ const PopularTVShowsScreen: React.FC = () => {
     fetchGenres();
   }, []);
 
-  // Map UI sort option to TMDB API sort_by parameter
   const getApiSortBy = (option: SortOption): string => {
       switch (option) {
           case 'rating': return 'vote_average.desc';
-          case 'first_air_date': return 'first_air_date.desc'; // TV sort key
+          case 'first_air_date': return 'first_air_date.desc';
           case 'popularity': 
           default: return 'popularity.desc';
       }
@@ -95,7 +92,6 @@ const PopularTVShowsScreen: React.FC = () => {
 
   useEffect(() => {
     fetchTVShows(page, page === 1);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, sortOption, selectedGenreId]);
 
   const handleLoadMore = () => {

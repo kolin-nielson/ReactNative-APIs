@@ -2,7 +2,6 @@ import { Dimensions } from 'react-native';
 
 const { width, height } = Dimensions.get('window');
 
-// Define common sizes and fonts first
 export const SIZES = {
   base: 8,
   font: 14,
@@ -36,7 +35,6 @@ export const FONTS = {
   body5: { fontSize: SIZES.body5, lineHeight: 18 },
 };
 
-// Define Color Palettes
 export const lightColors = {
   primary: '#0d6efd',
   secondary: '#6c757d',
@@ -45,7 +43,7 @@ export const lightColors = {
   black: '#000000',
   gray: '#adb5bd',
   lightGray: '#dee2e6',
-  lightGray2: '#e9ecef', // Add another light gray for subtle backgrounds
+  lightGray2: '#e9ecef',
   darkGray: '#343a40',
   success: '#198754',
   danger: '#dc3545',
@@ -57,28 +55,25 @@ export const lightColors = {
 };
 
 export const darkColors = {
-  primary: '#4dabf7', // Lighter primary for dark mode
-  secondary: '#adb5bd', // Lighter gray
-  background: '#18191a', // Very dark gray/off-black
+  primary: '#4dabf7',
+  secondary: '#adb5bd',
+  background: '#18191a',
   white: '#ffffff',
   black: '#000000',
-  gray: '#6c757d', // Medium gray
-  lightGray: '#495057', // Darker gray for borders
-  lightGray2: '#343a40', // Darker gray for subtle backgrounds
-  darkGray: '#f1f3f5', // Light gray for contrast elements
+  gray: '#6c757d',
+  lightGray: '#495057',
+  lightGray2: '#343a40',
+  darkGray: '#f1f3f5',
   success: '#20c997',
   danger: '#fa5252',
   warning: '#ffc107',
   info: '#3bc9db',
-  textPrimary: '#f8f9fa', // Light text
-  textSecondary: '#adb5bd', // Lighter gray text
-  textLight: '#212529', // Dark text for light backgrounds (if needed)
+  textPrimary: '#f8f9fa',
+  textSecondary: '#adb5bd',
+  textLight: '#212529',
 };
 
-// Export COLORS initially pointing to lightColors (or based on system preference later)
-// We will override this with context
 export const COLORS = lightColors;
 
-// Consolidate theme export if needed, but context will handle dynamic theme
 const appTheme = { COLORS, SIZES, FONTS };
 export default appTheme; 

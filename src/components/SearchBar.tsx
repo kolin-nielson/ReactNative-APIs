@@ -8,7 +8,7 @@ import {
     Platform,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { SIZES, FONTS, COLORS } from '../styles/theme'; // Re-add COLORS
+import { SIZES, FONTS, COLORS } from '../styles/theme';
 
 interface SearchBarProps {
     value: string;

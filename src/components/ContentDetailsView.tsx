@@ -14,13 +14,12 @@ import { Movie, TVShow, ContentDetailsUnion, WatchProvider, WatchProviderRespons
 import { SIZES, FONTS, COLORS } from '../styles/theme';
 
 interface ContentDetailsViewProps {
-  details: ContentDetailsUnion | null | undefined; // Accept MovieDetails or TVShowDetails
-  providers: WatchProviderResponse | null | undefined; // Add providers prop
+  details: ContentDetailsUnion | null | undefined; 
+  providers: WatchProviderResponse | null | undefined;
 }
 
 const placeholderImageSource: ImageSourcePropType = require('../assets/placeholder.png');
 
-// Helper to render a list of genres
 const GenresList: React.FC<{ genres: Genre[] | undefined }> = ({ genres }) => {
     if (!genres || genres.length === 0) return null;
     return (
@@ -34,7 +33,6 @@ const GenresList: React.FC<{ genres: Genre[] | undefined }> = ({ genres }) => {
     );
 };
 
-// Helper to render watch providers
 const WatchProvidersSection: React.FC<{ providers: WatchProviderResponse | null | undefined, countryCode?: string }> = ({ providers, countryCode = 'US' }) => {
     const countryProviders = providers?.results?.[countryCode];
     if (!countryProviders || (!countryProviders.flatrate && !countryProviders.buy && !countryProviders.rent)) {
@@ -92,17 +90,16 @@ const ContentDetailsView: React.FC<ContentDetailsViewProps> = ({ details, provid
     );
   }
 
-  // Determine properties based on media type
   const isMovie = details.media_type === 'movie';
-  const item = details as Movie | TVShow; // Base item for shared props
-  const detailedItem = details as MovieDetails | TVShowDetails; // For specific detail props
+  const item = details as Movie | TVShow; 
+  const detailedItem = details as MovieDetails | TVShowDetails; 
   
   const title = isMovie ? (item as Movie).title : (item as TVShow).name;
   const releaseDate = isMovie ? (item as Movie).release_date : (item as TVShow).first_air_date;
   const formattedDate = releaseDate ? new Date(releaseDate).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) : 'N/A';
   const rating = item.vote_average ? item.vote_average.toFixed(1) : 'N/A';
-  const runtime = isMovie ? (detailedItem as MovieDetails).runtime : undefined; // Movie only
-  const seasons = !isMovie ? (detailedItem as TVShowDetails).number_of_seasons : undefined; // TV only
+  const runtime = isMovie ? (detailedItem as MovieDetails).runtime : undefined; 
+  const seasons = !isMovie ? (detailedItem as TVShowDetails).number_of_seasons : undefined; 
   const episodes = !isMovie ? (detailedItem as TVShowDetails).number_of_episodes : undefined;
   const status = !isMovie ? (detailedItem as TVShowDetails).status : undefined;
 

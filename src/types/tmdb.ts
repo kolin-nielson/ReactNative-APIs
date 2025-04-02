@@ -7,25 +7,24 @@ export interface Movie {
   id: number;
   title: string;
   poster_path: string | null;
-  release_date: string; // YYYY-MM-DD
+  release_date: string;
   vote_average: number;
   overview: string;
-  genre_ids?: number[]; // Often in list responses
-  media_type?: 'movie'; // Useful for mixed lists/search
+  genre_ids?: number[];
+  media_type?: 'movie';
 }
 
 export interface TVShow {
   id: number;
-  name: string; // Note: TV shows use 'name' instead of 'title'
+  name: string;
   poster_path: string | null;
-  first_air_date: string; // YYYY-MM-DD
+  first_air_date: string;
   vote_average: number;
   overview: string;
   genre_ids?: number[];
   media_type?: 'tv';
 }
 
-// Unified type for easier handling in lists/components
 export type ContentItem = (Movie & { media_type: 'movie' }) | (TVShow & { media_type: 'tv' });
 
 export interface PaginatedResponse<T> {
@@ -39,14 +38,12 @@ export type MovieListResponse = PaginatedResponse<Movie>;
 export type TVShowListResponse = PaginatedResponse<TVShow>;
 export type SearchListResponse = PaginatedResponse<ContentItem>;
 
-// --- Detail Types --- 
 
 export interface MovieDetails extends Movie {
   genres: Genre[]; 
   homepage?: string;
   status?: string;
   runtime?: number; 
-  // Add other movie-specific detail fields if needed
 }
 
 export interface TVShowDetails extends TVShow {
@@ -55,13 +52,10 @@ export interface TVShowDetails extends TVShow {
   status?: string;
   number_of_seasons?: number; 
   number_of_episodes?: number; 
-  // Add other TV-specific detail fields if needed
 }
 
-// This union can represent the result of a details fetch before adding providers
 export type ContentDetailsUnion = MovieDetails | TVShowDetails;
 
-// --- Watch Provider Types --- 
 
 export interface WatchProvider {
   logo_path: string | null;
@@ -86,7 +80,6 @@ export interface WatchProviderResponse {
   results: WatchProviderResult;
 }
 
-// Add Genre List Response Type
 export interface GenreListResponse {
   genres: Genre[];
 } 

@@ -10,26 +10,23 @@ import { Ionicons } from '@expo/vector-icons';
 import { SIZES, FONTS, COLORS } from '../styles/theme';
 import LoadingIndicator from '../components/LoadingIndicator';
 
-// Define the type for the route params for this screen
 type MovieDetailsScreenRouteProp = RouteProp<RootStackParamList, 'MovieDetails'>;
 
 const MovieDetailsScreen: React.FC = () => {
   const route = useRoute<MovieDetailsScreenRouteProp>();
-  const navigation = useNavigation(); // Use plain navigation for header options
-  const { movie: initialMovieData } = route.params; // Initial data passed from list
+  const navigation = useNavigation();
+  const { movie: initialMovieData } = route.params;
 
-  const [details, setDetails] = useState<MovieDetails | null>(null); // Initialize as null
+  const [details, setDetails] = useState<MovieDetails | null>(null);
   const [providers, setProviders] = useState<WatchProviderResponse | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(true); // Start loading true
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<Error | null>(null);
 
   const { isItemInList, addItemToWatchlist, removeItemFromWatchlist } = useWatchlist();
-  // Check against details first, fallback to initial data if details haven't loaded
   const isWatchlisted = details
     ? isItemInList(details.id, 'movie')
     : isItemInList(initialMovieData.id, 'movie');
 
-  // Fetch full details and providers on mount
   useEffect(() => {
     const fetchDetails = async () => {
       setIsLoading(true);
@@ -57,7 +54,6 @@ const MovieDetailsScreen: React.FC = () => {
         }
 
       } catch (err) {
-        // Catch any other unexpected errors during Promise.allSettled or setup
         const fetchError = err instanceof Error ? err : new Error('An unknown error occurred');
         setError(fetchError);
         console.error("Error in fetchDetails effect:", fetchError);
@@ -67,15 +63,12 @@ const MovieDetailsScreen: React.FC = () => {
     };
 
     fetchDetails();
-  }, [initialMovieData.id]); // Re-run if the movie ID changes
+  }, [initialMovieData.id]);
 
-  // Watchlist toggle handler
   const handleWatchlistToggle = () => {
-    // Use initial data as fallback if full details haven't loaded yet
     const itemData = details ?? initialMovieData;
     if (!itemData) return;
 
-    // Ensure media_type is present
     const itemToAddOrRemove = { 
         ...itemData, 
         media_type: 'movie' as const 
@@ -84,12 +77,10 @@ const MovieDetailsScreen: React.FC = () => {
     if (isWatchlisted) {
       removeItemFromWatchlist(itemToAddOrRemove.id, itemToAddOrRemove.media_type);
     } else {
-      // Ensure we pass a valid ContentItem (Movie with media_type)
       addItemToWatchlist(itemToAddOrRemove);
     }
   };
 
-  // Set header button dynamically based on watchlist state
   useLayoutEffect(() => {
     const canToggle = !!(details ?? initialMovieData);
     navigation.setOptions({
@@ -102,20 +93,18 @@ const MovieDetailsScreen: React.FC = () => {
           <Ionicons 
             name={isWatchlisted ? 'bookmark' : 'bookmark-outline'} 
             size={28} 
-            color={canToggle ? COLORS.primary : COLORS.gray} // Use static COLORS
+            color={canToggle ? COLORS.primary : COLORS.gray}
           />
         </TouchableOpacity>
       ),
       title: details?.title ?? initialMovieData.title ?? 'Movie Details',
     });
-  }, [navigation, isWatchlisted, handleWatchlistToggle, details, initialMovieData]); // Remove colors dependency
+  }, [navigation, isWatchlisted, handleWatchlistToggle, details, initialMovieData]);
 
-  // Render Loading state
   if (isLoading) {
     return <LoadingIndicator />;
   }
 
-  // Render Error state - show error if fetch failed AND details are still null
   if (error && !details) {
     return (
       <SafeAreaView style={styles.containerCentered}>
@@ -125,7 +114,6 @@ const MovieDetailsScreen: React.FC = () => {
     );
   }
 
-  // Render Content - Only render ContentDetailsView if details are available
   if (details) {
       return (
         <SafeAreaView style={styles.container}>
@@ -134,7 +122,6 @@ const MovieDetailsScreen: React.FC = () => {
       );
   }
 
-  // Fallback if loading finished but details are somehow still null (shouldn't happen if fetch is successful)
   return (
     <SafeAreaView style={styles.containerCentered}>
         <Text style={styles.errorText}>Movie details could not be displayed.</Text>

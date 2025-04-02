@@ -1,50 +1,37 @@
-# Welcome to your Expo app 👋
+# Movie & TV Show Explorer App
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+This is a React Native application built with Expo and TypeScript that allows users to discover popular and top-rated movies and TV shows, search for content, view details including watch providers, and manage a personal watchlist. It utilizes the The Movie Database (TMDB) API.
 
-## Get started
+## Features
 
-1. Install dependencies
+*   **Discover Content:** Browse separate sections for popular Movies and TV Shows.
+*   **Search:** Find movies and TV shows by title.
+*   **Detailed Views:** Get comprehensive details for movies and TV shows, including synopsis, ratings, release dates, genres, runtime/seasons, and status.
+*   **Watch Providers:** See where to stream, rent, or buy content (powered by JustWatch via TMDB).
+*   **Watchlist:** Add/remove movies and TV shows to a persistent watchlist stored locally on the device.
+*   **Loading States:** Provides visual feedback while fetching data.
+*   **Pull-to-Refresh:** Refresh content lists easily.
 
-   ```bash
-   npm install
-   ```
+## Technology Stack
 
-2. Start the app
+*   React Native
+*   Expo
+*   TypeScript
+*   React Navigation (for Tab and Stack navigation)
+*   The Movie Database (TMDB) API
+*   AsyncStorage (for Watchlist persistence)
 
-   ```bash
-    npx expo start
-   ```
 
-In the output, you'll find options to open the app in a
+## Project Structure
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
-```
-
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+*   `src/api/`: Contains the TMDB API service logic (`tmdbService.ts`).
+*   `src/assets/`: Static assets like placeholder images.
+*   `src/components/`: Reusable UI components (`ContentItemCard`, `ContentList`, `ContentDetailsView`, etc.).
+*   `src/constants/`: Application constants (API keys, base URLs).
+*   `src/context/`: React Context for global state management (e.g., `WatchlistContext`).
+*   `src/hooks/`: Custom hooks (e.g., `useWatchlist`).
+*   `src/navigation/`: Navigation setup (`AppNavigator.tsx`).
+*   `src/screens/`: Top-level screen components for each tab/view.
+*   `src/styles/`: Global theme and styling (`theme.ts`).
+*   `src/types/`: TypeScript type definitions, especially for API responses (`tmdb.ts`).
+*   `App.tsx`: The main application entry point.

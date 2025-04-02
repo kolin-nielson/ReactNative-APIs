@@ -120,7 +120,6 @@ const styles = StyleSheet.create({
         padding: SIZES.base / 2,
     },
     list: {
-        // Optional: Add styles if needed
     },
     itemContainer: {
         paddingVertical: SIZES.padding * 1.5,

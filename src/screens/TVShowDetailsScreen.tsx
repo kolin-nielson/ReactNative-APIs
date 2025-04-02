@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useLayoutEffect } from 'react';
 import { View, StyleSheet, SafeAreaView, Text, TouchableOpacity } from 'react-native';
 import { RouteProp, useRoute, useNavigation } from '@react-navigation/native';
-// import TVShowDetailsView from '../components/TVShowDetailsView'; // Placeholder for a specific view if needed
 import ContentDetailsView from '../components/ContentDetailsView'; // Use generic view
 import { RootStackParamList } from '../navigation/AppNavigator';
 import { getTVShowDetails, getTVShowWatchProviders } from '../api/tmdbService';
