@@ -1,14 +1,18 @@
 import React from 'react';
 import { View, ActivityIndicator, StyleSheet, ActivityIndicatorProps } from 'react-native';
-import { COLORS } from '../styles/theme';
+import { useTheme } from '../context/ThemeContext';
 
-interface LoadingIndicatorProps extends ActivityIndicatorProps {}
+interface LoadingIndicatorProps extends ActivityIndicatorProps {
+    color?: string;
+}
 
-const LoadingIndicator: React.FC<LoadingIndicatorProps> = ({ size = 'large', style, color = COLORS.primary, ...props }) => {
+const LoadingIndicator: React.FC<LoadingIndicatorProps> = ({ size = 'large', style, color, ...props }) => {
+    const { colors } = useTheme();
+    const indicatorColor = color || colors.primary;
 
     return (
         <View style={[styles.container, style]}>
-            <ActivityIndicator size={size} color={color} {...props} />
+            <ActivityIndicator size={size} color={indicatorColor} {...props} />
         </View>
     );
 };

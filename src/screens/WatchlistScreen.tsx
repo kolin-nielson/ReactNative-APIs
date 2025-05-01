@@ -6,12 +6,16 @@ import { useWatchlist } from '../context/WatchlistContext';
 import ContentList from '../components/ContentList';
 import { Movie, TVShow, ContentItem } from '../types/tmdb';
 import { RootStackParamList } from '../navigation/AppNavigator';
-import { SIZES, FONTS, COLORS } from '../styles/theme';
+import { SIZES, FONTS } from '../styles/theme';
+import { useTheme } from '../context/ThemeContext';
 import LoadingIndicator from '../components/LoadingIndicator';
 
 type WatchlistScreenNavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
 const WatchlistScreen: React.FC = () => {
+  const { colors } = useTheme();
+  const styles = createThemedStyles(colors, SIZES, FONTS);
+  
   const { watchlist, isLoading: isWatchlistLoading } = useWatchlist();
   const navigation = useNavigation<WatchlistScreenNavigationProp>();
 
@@ -60,10 +64,11 @@ const WatchlistScreen: React.FC = () => {
   );
 };
 
-const styles = StyleSheet.create({
+const createThemedStyles = (colors: typeof import('../styles/theme').lightColors, SIZES: any, FONTS: any) => 
+  StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: COLORS.background,
+        backgroundColor: colors.background,
     },
     innerContainer: {
         flex: 1,
@@ -77,9 +82,9 @@ const styles = StyleSheet.create({
     },
     infoText: {
         ...FONTS.body3,
-        color: COLORS.textSecondary,
+        color: colors.textSecondary,
         textAlign: 'center',
     }
-});
+  });
 
 export default WatchlistScreen; 

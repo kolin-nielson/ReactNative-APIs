@@ -7,12 +7,16 @@ import { getTVShowDetails, getTVShowWatchProviders } from '../api/tmdbService';
 import { TVShow, TVShowDetails, WatchProviderResponse } from '../types/tmdb';
 import { useWatchlist } from '../context/WatchlistContext';
 import { Ionicons } from '@expo/vector-icons';
-import { SIZES, FONTS, COLORS } from '../styles/theme';
+import { SIZES, FONTS } from '../styles/theme';
+import { useTheme } from '../context/ThemeContext';
 import LoadingIndicator from '../components/LoadingIndicator';
 
 type TVShowDetailsScreenRouteProp = RouteProp<RootStackParamList, 'TVShowDetails'>;
 
 const TVShowDetailsScreen: React.FC = () => {
+  const { colors } = useTheme();
+  const styles = createThemedStyles(colors, SIZES, FONTS);
+
   const route = useRoute<TVShowDetailsScreenRouteProp>();
   const navigation = useNavigation();
   const { tvShow: initialTVData } = route.params; 
@@ -93,13 +97,13 @@ const TVShowDetailsScreen: React.FC = () => {
           <Ionicons 
             name={isWatchlisted ? 'bookmark' : 'bookmark-outline'} 
             size={28} 
-            color={canToggle ? COLORS.primary : COLORS.gray}
+            color={canToggle ? colors.primary : colors.gray}
           />
         </TouchableOpacity>
       ),
       title: details?.name ?? initialTVData.name ?? 'TV Show Details',
     });
-  }, [navigation, isWatchlisted, handleWatchlistToggle, details, initialTVData]);
+  }, [navigation, isWatchlisted, handleWatchlistToggle, details, initialTVData, colors]);
 
   if (isLoading) {
     return <LoadingIndicator />;
@@ -129,32 +133,33 @@ const TVShowDetailsScreen: React.FC = () => {
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: COLORS.background,
-  },
-  containerCentered: {
-    flex: 1,
-    backgroundColor: COLORS.background,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: SIZES.padding,
-  },
-  headerButton: {
-    marginRight: SIZES.padding,
-  },
-  errorText: {
-    ...FONTS.h3,
-    color: COLORS.danger,
-    textAlign: 'center',
-    marginBottom: SIZES.base,
-  },
-  errorInfo: {
-    ...FONTS.body4,
-    color: COLORS.textSecondary,
-    textAlign: 'center',
-  }
+const createThemedStyles = (colors: typeof import('../styles/theme').lightColors, SIZES: any, FONTS: any) => 
+  StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: colors.background,
+    },
+    containerCentered: {
+      flex: 1,
+      backgroundColor: colors.background,
+      justifyContent: 'center',
+      alignItems: 'center',
+      padding: SIZES.padding,
+    },
+    headerButton: {
+      marginRight: SIZES.padding,
+    },
+    errorText: {
+      ...FONTS.h3,
+      color: colors.danger,
+      textAlign: 'center',
+      marginBottom: SIZES.base,
+    },
+    errorInfo: {
+      ...FONTS.body4,
+      color: colors.textSecondary,
+      textAlign: 'center',
+    }
 });
 
 export default TVShowDetailsScreen; 

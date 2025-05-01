@@ -10,7 +10,8 @@ import {
 } from 'react-native';
 import { TMDB_IMAGE_BASE_URL } from '../constants/api';
 import { ContentItem, Movie, TVShow } from '../types/tmdb';
-import { SIZES, FONTS, COLORS } from '../styles/theme';
+import { SIZES, FONTS } from '../styles/theme';
+import { useTheme } from '../context/ThemeContext';
 import { Ionicons } from '@expo/vector-icons';
 
 const numColumns = 2;
@@ -34,6 +35,9 @@ const ContentItemCard: React.FC<ContentItemCardProps> = React.memo(({
     isWatchlisted, 
     onWatchlistPress 
 }) => {
+  const { colors } = useTheme();
+  const styles = createThemedStyles(colors);
+
   const imageUrl = item.poster_path
     ? `${TMDB_IMAGE_BASE_URL}${item.poster_path}`
     : null;
@@ -60,7 +64,7 @@ const ContentItemCard: React.FC<ContentItemCardProps> = React.memo(({
           <Ionicons 
             name={isWatchlisted ? "bookmark" : "bookmark-outline"} 
             size={24} 
-            color={isWatchlisted ? COLORS.primary : COLORS.white}
+            color={isWatchlisted ? colors.primary : colors.white}
           />
       </TouchableOpacity>
       <View style={styles.infoContainer}>
@@ -75,60 +79,62 @@ const ContentItemCard: React.FC<ContentItemCardProps> = React.memo(({
   );
 });
 
-const styles = StyleSheet.create({
-  container: {
-    width: cardWidth,
-    marginHorizontal: cardMarginHorizontal,
-    marginBottom: SIZES.padding * 1.5,
-    backgroundColor: COLORS.white,
-    borderRadius: SIZES.radius,
-    overflow: 'visible',
-    ...Platform.select({
-        ios: {
-            shadowColor: COLORS.black,
-            shadowOffset: { width: 0, height: 4 },
-            shadowOpacity: 0.15,
-            shadowRadius: 8,
-        },
-        android: {
-            elevation: 6,
-        },
-    }),
-  },
-  poster: {
-    width: '100%',
-    height: cardWidth * 1.5,
-    backgroundColor: COLORS.lightGray,
-    borderRadius: SIZES.radius,
-  },
-  watchlistButton: {
-      position: 'absolute',
-      top: SIZES.base,
-      right: SIZES.base,
-      backgroundColor: 'rgba(0, 0, 0, 0.5)',
-      borderRadius: 15,
-      width: 30,
-      height: 30,
-      justifyContent: 'center',
-      alignItems: 'center',
-      zIndex: 1,
-  },
-  infoContainer: {
-    padding: SIZES.padding * 0.75,
-    minHeight: 70,
-    justifyContent: 'space-between',
-  },
-  title: {
-    ...FONTS.body4,
-    fontWeight: 'bold',
-    marginBottom: SIZES.base / 2,
-    color: COLORS.textPrimary,
-    flexShrink: 1,
-  },
-  details: {
-    ...FONTS.body5,
-    color: COLORS.textSecondary,
-  },
+const createThemedStyles = (colors: typeof import('../styles/theme').lightColors) => 
+  StyleSheet.create({
+    container: {
+      width: cardWidth,
+      marginHorizontal: cardMarginHorizontal,
+      marginBottom: SIZES.padding * 1.5,
+      backgroundColor: colors.white,
+      borderRadius: SIZES.radius,
+      overflow: 'visible',
+      ...Platform.select({
+          ios: {
+              shadowColor: colors.black,
+              shadowOffset: { width: 0, height: 4 },
+              shadowOpacity: 0.15,
+              shadowRadius: 8,
+          },
+          android: {
+              elevation: 6,
+              backgroundColor: colors.white,
+          },
+      }),
+    },
+    poster: {
+      width: '100%',
+      height: cardWidth * 1.5,
+      backgroundColor: colors.lightGray,
+      borderRadius: SIZES.radius,
+    },
+    watchlistButton: {
+        position: 'absolute',
+        top: SIZES.base,
+        right: SIZES.base,
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        borderRadius: 15,
+        width: 30,
+        height: 30,
+        justifyContent: 'center',
+        alignItems: 'center',
+        zIndex: 1,
+    },
+    infoContainer: {
+      padding: SIZES.padding * 0.75,
+      minHeight: 70,
+      justifyContent: 'space-between',
+    },
+    title: {
+      ...FONTS.body4,
+      fontWeight: 'bold',
+      marginBottom: SIZES.base / 2,
+      color: colors.textPrimary,
+      flexShrink: 1,
+    },
+    details: {
+      ...FONTS.body5,
+      color: colors.textSecondary,
+    },
 });
 
 export default ContentItemCard; 

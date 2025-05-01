@@ -73,7 +73,7 @@ export const darkColors = {
   textLight: '#212529',
 };
 
-export const COLORS = lightColors;
-
-const appTheme = { COLORS, SIZES, FONTS };
-export default appTheme; 
+// Remove the direct export of COLORS and the default appTheme export
+// export const COLORS = lightColors;
+// const appTheme = { COLORS, SIZES, FONTS };
+// export default appTheme; 

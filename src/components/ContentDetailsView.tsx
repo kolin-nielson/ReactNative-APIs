@@ -11,7 +11,8 @@ import {
 } from 'react-native';
 import { TMDB_IMAGE_BASE_URL } from '../constants/api';
 import { Movie, TVShow, ContentDetailsUnion, WatchProvider, WatchProviderResponse, Genre, MovieDetails, TVShowDetails } from '../types/tmdb';
-import { SIZES, FONTS, COLORS } from '../styles/theme';
+import { SIZES, FONTS } from '../styles/theme';
+import { useTheme } from '../context/ThemeContext';
 
 interface ContentDetailsViewProps {
   details: ContentDetailsUnion | null | undefined; 
@@ -20,68 +21,232 @@ interface ContentDetailsViewProps {
 
 const placeholderImageSource: ImageSourcePropType = require('../assets/placeholder.png');
 
+const createStyles = (colors: typeof import('../styles/theme').lightColors, SIZES: any, FONTS: any) => 
+  StyleSheet.create({
+  container: {
+    flex: 1,
+        backgroundColor: colors.background,
+  },
+  contentContainer: {
+    paddingBottom: SIZES.padding * 3,
+    alignItems: 'center',
+  },
+  poster: {
+        width: SIZES.width * 0.8,
+    height: SIZES.width * 0.8 * 1.5,
+    marginTop: SIZES.padding,
+    marginBottom: SIZES.padding,
+    borderRadius: SIZES.radius * 1.5,
+        backgroundColor: colors.lightGray,
+    borderWidth: 1,
+        borderColor: colors.lightGray,
+  },
+  infoSection: {
+      width: '100%',
+        paddingHorizontal: SIZES.padding * 1.5, 
+      marginTop: SIZES.padding,
+  },
+  title: {
+    ...FONTS.h2,
+        fontWeight: '700',
+    textAlign: 'center',
+        marginBottom: SIZES.base,
+        color: colors.textPrimary,
+    },
+    genresContainer: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        justifyContent: 'center',
+    marginBottom: SIZES.padding2,
+    },
+    genreBadge: {
+        backgroundColor: colors.lightGray2,
+        borderRadius: SIZES.radius * 2,
+        paddingVertical: SIZES.base / 2,
+        paddingHorizontal: SIZES.base * 1.5,
+        margin: SIZES.base / 2,
+    },
+    genreText: {
+        ...FONTS.body5,
+        color: colors.textSecondary,
+        fontWeight: '600',
+  },
+  detailsRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+        alignItems: 'flex-start',
+    width: '100%',
+    marginBottom: SIZES.padding2,
+    paddingVertical: SIZES.padding,
+    borderTopWidth: 1,
+    borderBottomWidth: 1,
+        borderColor: colors.lightGray,
+  },
+  detailItemContainer: {
+      alignItems: 'center',
+      flex: 1,
+        paddingHorizontal: SIZES.base / 2,
+  },
+  detailLabel: {
+      ...FONTS.body5,
+        color: colors.textSecondary,
+      marginBottom: SIZES.base / 2,
+      textTransform: 'uppercase',
+        letterSpacing: 0.5,
+        textAlign: 'center',
+  },
+  detailValue: {
+    ...FONTS.h4,
+    fontWeight: '600',
+        color: colors.textPrimary,
+    textAlign: 'center',
+  },
+  sectionTitle: {
+    ...FONTS.h3,
+    marginBottom: SIZES.padding,
+        color: colors.textPrimary,
+        marginTop: SIZES.padding,
+  },
+  overview: {
+    ...FONTS.body3,
+        color: colors.textSecondary,
+        lineHeight: FONTS.body3.fontSize * 1.6,
+        textAlign: 'justify',
+        marginBottom: SIZES.padding2,
+  },
+  centeredMessage: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+        backgroundColor: colors.background,
+  },
+  infoText: {
+      ...FONTS.body3,
+        color: colors.textSecondary,
+        textAlign: 'center',
+    },
+    providerSection: {
+        marginBottom: SIZES.padding2,
+        paddingTop: SIZES.padding,
+        borderTopWidth: 1,
+        borderColor: colors.lightGray,
+    },
+    providerCategory: {
+        marginBottom: SIZES.padding,
+    },
+    providerCategoryTitle: {
+        ...FONTS.h4,
+        color: colors.textPrimary,
+        marginBottom: SIZES.base,
+    },
+    providerListContainer: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+    },
+    providerItem: {
+        alignItems: 'center',
+        marginRight: SIZES.padding,
+        marginBottom: SIZES.padding,
+        width: SIZES.width / 4 - SIZES.padding * 2, 
+    },
+    providerLogo: {
+        width: 50,
+        height: 50,
+        borderRadius: SIZES.radius,
+        marginBottom: SIZES.base / 2,
+        backgroundColor: colors.white,
+    },
+    providerName: {
+        ...FONTS.body6,
+        color: colors.textSecondary,
+        textAlign: 'center',
+        fontSize: 10,
+    },
+    providerInfoText: {
+        ...FONTS.body4,
+        color: colors.textSecondary,
+        textAlign: 'center',
+        fontStyle: 'italic',
+        marginTop: SIZES.padding,
+    },
+    providerLink: {
+        ...FONTS.body4,
+        color: colors.primary,
+        textAlign: 'center',
+        textDecorationLine: 'underline',
+        marginTop: SIZES.padding,
+  },
+});
+
 const GenresList: React.FC<{ genres: Genre[] | undefined }> = ({ genres }) => {
-    if (!genres || genres.length === 0) return null;
-    return (
-        <View style={styles.genresContainer}>
-            {genres.map((genre) => (
-                <View key={genre.id} style={styles.genreBadge}>
-                    <Text style={styles.genreText}>{genre.name}</Text>
-                </View>
-            ))}
+  const { colors } = useTheme();
+  const styles = createStyles(colors, SIZES, FONTS);
+  if (!genres || genres.length === 0) return null;
+  return (
+    <View style={styles.genresContainer}>
+      {genres.map((genre) => (
+        <View key={genre.id} style={styles.genreBadge}>
+          <Text style={styles.genreText}>{genre.name}</Text>
         </View>
-    );
+      ))}
+    </View>
+  );
 };
 
 const WatchProvidersSection: React.FC<{ providers: WatchProviderResponse | null | undefined, countryCode?: string }> = ({ providers, countryCode = 'US' }) => {
-    const countryProviders = providers?.results?.[countryCode];
-    if (!countryProviders || (!countryProviders.flatrate && !countryProviders.buy && !countryProviders.rent)) {
-        return (
-            <View style={styles.providerSection}>
-                <Text style={styles.providerInfoText}>Watch providers not available for your region.</Text>
-            </View>
-        );
-    }
-
-    const renderProviderList = (title: string, providerList: WatchProvider[] | undefined) => {
-        if (!providerList || providerList.length === 0) return null;
-        providerList.sort((a, b) => a.display_priority - b.display_priority);
-        return (
-            <View style={styles.providerCategory}>
-                <Text style={styles.providerCategoryTitle}>{title}</Text>
-                <View style={styles.providerListContainer}>
-                    {providerList.map((provider) => (
-                        <View key={provider.provider_id} style={styles.providerItem}>
-                            {provider.logo_path && (
-                                <Image 
-                                    source={{ uri: `${TMDB_IMAGE_BASE_URL.replace('w500', 'w92')}${provider.logo_path}` }} 
-                                    style={styles.providerLogo}
-                                    resizeMode="contain"
-                                />
-                            )}
-                            <Text style={styles.providerName}>{provider.provider_name}</Text>
-                        </View>
-                    ))}
-                </View>
-            </View>
-        );
-    }
-
+  const { colors } = useTheme();
+  const styles = createStyles(colors, SIZES, FONTS);
+  const countryProviders = providers?.results?.[countryCode];
+  if (!countryProviders || (!countryProviders.flatrate && !countryProviders.buy && !countryProviders.rent)) {
     return (
-        <View style={styles.providerSection}>
-            {renderProviderList('Stream', countryProviders.flatrate)}
-            {renderProviderList('Rent', countryProviders.rent)}
-            {renderProviderList('Buy', countryProviders.buy)}
-            {countryProviders.link && (
-                 <TouchableOpacity onPress={() => Linking.openURL(countryProviders.link!)}>
-                     <Text style={styles.providerLink}>See all options on JustWatch</Text>
-                 </TouchableOpacity>
-            )}
-        </View>
+      <View style={styles.providerSection}>
+        <Text style={styles.providerInfoText}>Watch providers not available for your region.</Text>
+      </View>
     );
+  }
+
+  const renderProviderList = (title: string, providerList: WatchProvider[] | undefined) => {
+    if (!providerList || providerList.length === 0) return null;
+    providerList.sort((a, b) => a.display_priority - b.display_priority);
+    return (
+      <View style={styles.providerCategory}>
+        <Text style={styles.providerCategoryTitle}>{title}</Text>
+        <View style={styles.providerListContainer}>
+          {providerList.map((provider) => (
+            <View key={provider.provider_id} style={styles.providerItem}>
+              {provider.logo_path && (
+                <Image 
+                  source={{ uri: `${TMDB_IMAGE_BASE_URL.replace('w500', 'w92')}${provider.logo_path}` }} 
+                  style={styles.providerLogo}
+                  resizeMode="contain"
+                />
+              )}
+              <Text style={styles.providerName}>{provider.provider_name}</Text>
+            </View>
+          ))}
+        </View>
+      </View>
+    );
+  }
+
+  return (
+    <View style={styles.providerSection}>
+      {renderProviderList('Stream', countryProviders.flatrate)}
+      {renderProviderList('Rent', countryProviders.rent)}
+      {renderProviderList('Buy', countryProviders.buy)}
+      {countryProviders.link && (
+        <TouchableOpacity onPress={() => Linking.openURL(countryProviders.link!)}>
+          <Text style={styles.providerLink}>See all options on JustWatch</Text>
+        </TouchableOpacity>
+      )}
+    </View>
+  );
 };
 
 const ContentDetailsView: React.FC<ContentDetailsViewProps> = ({ details, providers }) => {
+  const { colors } = useTheme();
+  const styles = createStyles(colors, SIZES, FONTS);
+
   if (!details) {
     return (
       <View style={styles.centeredMessage}>
@@ -161,159 +326,5 @@ const ContentDetailsView: React.FC<ContentDetailsViewProps> = ({ details, provid
     </ScrollView>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: COLORS.background,
-  },
-  contentContainer: {
-    paddingBottom: SIZES.padding * 3,
-    alignItems: 'center',
-  },
-  poster: {
-    width: SIZES.width * 0.8,
-    height: SIZES.width * 0.8 * 1.5,
-    marginTop: SIZES.padding,
-    marginBottom: SIZES.padding,
-    borderRadius: SIZES.radius * 1.5,
-    backgroundColor: COLORS.lightGray,
-    borderWidth: 1,
-    borderColor: COLORS.lightGray,
-  },
-  infoSection: {
-      width: '100%',
-      paddingHorizontal: SIZES.padding * 1.5, 
-      marginTop: SIZES.padding,
-  },
-  title: {
-    ...FONTS.h2,
-    fontWeight: '700',
-    textAlign: 'center',
-    marginBottom: SIZES.base,
-    color: COLORS.textPrimary,
-  },
-  genresContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'center',
-    marginBottom: SIZES.padding2,
-  },
-  genreBadge: {
-    backgroundColor: COLORS.lightGray2,
-    borderRadius: SIZES.radius * 2,
-    paddingVertical: SIZES.base / 2,
-    paddingHorizontal: SIZES.base * 1.5,
-    margin: SIZES.base / 2,
-  },
-  genreText: {
-    ...FONTS.body5,
-    color: COLORS.textSecondary,
-    fontWeight: '600',
-  },
-  detailsRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'flex-start',
-    width: '100%',
-    marginBottom: SIZES.padding2,
-    paddingVertical: SIZES.padding,
-    borderTopWidth: 1,
-    borderBottomWidth: 1,
-    borderColor: COLORS.lightGray,
-  },
-  detailItemContainer: {
-      alignItems: 'center',
-      flex: 1,
-      paddingHorizontal: SIZES.base / 2,
-  },
-  detailLabel: {
-      ...FONTS.body5,
-      color: COLORS.textSecondary,
-      marginBottom: SIZES.base / 2,
-      textTransform: 'uppercase',
-      letterSpacing: 0.5,
-      textAlign: 'center',
-  },
-  detailValue: {
-    ...FONTS.h4,
-    fontWeight: '600',
-    color: COLORS.textPrimary,
-    textAlign: 'center',
-  },
-  sectionTitle: {
-    ...FONTS.h3,
-    marginBottom: SIZES.padding,
-    color: COLORS.textPrimary,
-  },
-  overview: {
-    ...FONTS.body3,
-    lineHeight: SIZES.body3.fontSize * 1.6,
-    color: COLORS.textSecondary,
-    textAlign: 'left',
-    marginBottom: SIZES.padding2,
-  },
-  providerSection: {
-    marginBottom: SIZES.padding,
-    borderTopWidth: 1,
-    borderTopColor: COLORS.lightGray,
-    paddingTop: SIZES.padding,
-  },
-  providerCategory: {
-      marginBottom: SIZES.padding,
-  },
-  providerCategoryTitle: {
-    ...FONTS.h4,
-    fontWeight: 'bold',
-    color: COLORS.textPrimary,
-    marginBottom: SIZES.base,
-  },
-  providerListContainer: {
-      flexDirection: 'row',
-      flexWrap: 'wrap',
-  },
-  providerItem: {
-      alignItems: 'center',
-      marginRight: SIZES.padding,
-      marginBottom: SIZES.base,
-      width: 60,
-  },
-  providerLogo: {
-      width: 50,
-      height: 50,
-      borderRadius: SIZES.radius,
-      marginBottom: SIZES.base / 2,
-      backgroundColor: COLORS.lightGray, 
-  },
-  providerName: {
-      ...FONTS.body5,
-      color: COLORS.textSecondary,
-      textAlign: 'center',
-      fontSize: 10,
-  },
-  providerLink: {
-      ...FONTS.body4,
-      color: COLORS.primary,
-      textAlign: 'center',
-      marginTop: SIZES.base,
-  },
-  providerInfoText: {
-      ...FONTS.body4,
-      color: COLORS.textSecondary,
-      textAlign: 'center',
-      fontStyle: 'italic',
-  },
-  centeredMessage: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: SIZES.padding,
-    backgroundColor: COLORS.background,
-  },
-  infoText: {
-      ...FONTS.body3,
-      color: COLORS.textSecondary,
-  },
-});
 
 export default ContentDetailsView; 

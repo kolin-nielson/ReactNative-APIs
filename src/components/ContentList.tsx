@@ -3,8 +3,9 @@ import { FlatList, StyleSheet, View, Text, ListRenderItemInfo, RefreshControl } 
 import ContentItemCard from './ContentItemCard';
 import LoadingIndicator from './LoadingIndicator';
 import { ContentItem } from '../types/tmdb';
-import { SIZES, FONTS, COLORS } from '../styles/theme';
+import { SIZES, FONTS } from '../styles/theme';
 import { useWatchlist } from '../context/WatchlistContext';
+import { useTheme } from '../context/ThemeContext';
 
 interface ContentListProps {
   items: ContentItem[];
@@ -28,8 +29,8 @@ const ContentList: React.FC<ContentListProps> = ({
   isRefreshing = false,
 }) => {
   const { isItemInList, addItemToWatchlist, removeItemFromWatchlist } = useWatchlist();
-
-  const styles = staticStyles(SIZES, FONTS);
+  const { colors } = useTheme();
+  const styles = createThemedStyles(colors, SIZES, FONTS);
   
   if (isLoading && items.length === 0 && !isRefreshing) {
     return <LoadingIndicator />;
@@ -91,8 +92,8 @@ const ContentList: React.FC<ContentListProps> = ({
           <RefreshControl
             refreshing={isRefreshing}
             onRefresh={onRefresh}
-            tintColor={COLORS.primary}
-            colors={[COLORS.primary]}
+            tintColor={colors.primary}
+            colors={[colors.primary]}
           />
         ) : undefined
       }
@@ -100,38 +101,39 @@ const ContentList: React.FC<ContentListProps> = ({
   );
 };
 
-const staticStyles = (SIZES: any, FONTS: any) => StyleSheet.create({
-  listContainer: {
-    paddingHorizontal: SIZES.padding / 2,
-    paddingTop: SIZES.padding,
-    paddingBottom: SIZES.padding * 2,
-  },
-  listBackground: {
-      backgroundColor: COLORS.background,
-  },
-  centeredMessage: {
-    flexGrow: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: SIZES.padding * 2,
-    minHeight: SIZES.height / 2,
-    backgroundColor: COLORS.background,
-  },
-  errorText: {
-      ...FONTS.h4,
-      color: COLORS.danger,
-      textAlign: 'center',
-      marginBottom: SIZES.base,
-  },
-  infoText: {
-      ...FONTS.body3,
-      color: COLORS.textSecondary,
-      textAlign: 'center',
-  },
-  footerLoading: {
-      paddingVertical: SIZES.padding,
-      backgroundColor: COLORS.background,
-  }
+const createThemedStyles = (colors: typeof import('../styles/theme').lightColors, SIZES: any, FONTS: any) => 
+  StyleSheet.create({
+    listContainer: {
+      paddingHorizontal: SIZES.padding / 2,
+      paddingTop: SIZES.padding,
+      paddingBottom: SIZES.padding * 2,
+    },
+    listBackground: {
+        backgroundColor: colors.background,
+    },
+    centeredMessage: {
+      flexGrow: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      padding: SIZES.padding * 2,
+      minHeight: SIZES.height / 2,
+      backgroundColor: colors.background,
+    },
+    errorText: {
+        ...FONTS.h4,
+        color: colors.danger,
+        textAlign: 'center',
+        marginBottom: SIZES.base,
+    },
+    infoText: {
+        ...FONTS.body3,
+        color: colors.textSecondary,
+        textAlign: 'center',
+    },
+    footerLoading: {
+        paddingVertical: SIZES.padding,
+        backgroundColor: colors.background,
+    }
 });
 
 export default ContentList; 

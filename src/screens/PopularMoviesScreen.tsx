@@ -6,7 +6,8 @@ import { discoverMovies, getMovieGenres } from '../api/tmdbService';
 import ContentList from '../components/ContentList';
 import { Movie, ContentItem, Genre, TVShow } from '../types/tmdb';
 import { RootStackParamList } from '../navigation/AppNavigator';
-import { FONTS, SIZES, COLORS } from '../styles/theme';
+import { FONTS, SIZES } from '../styles/theme';
+import { useTheme } from '../context/ThemeContext';
 import GenrePickerModal from '../components/GenrePickerModal';
 import { Ionicons } from '@expo/vector-icons';
 
@@ -14,6 +15,8 @@ type PopularMoviesScreenNavigationProp = NativeStackNavigationProp<RootStackPara
 type SortOption = 'popularity' | 'rating' | 'release_date';
 
 const PopularMoviesScreen: React.FC = () => {
+  const { colors } = useTheme();
+  const styles = createThemedStyles(colors, SIZES, FONTS);
   const [contentItems, setContentItems] = useState<ContentItem[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
@@ -208,59 +211,61 @@ const PopularMoviesScreen: React.FC = () => {
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: COLORS.background,
-  },
-  innerContainer: {
-    flex: 1,
-  },
-  sortContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    paddingVertical: SIZES.padding / 2,
-    paddingHorizontal: SIZES.padding,
-    borderBottomWidth: 1,
-    borderBottomColor: COLORS.lightGray,
-  },
-  sortButton: {
-    paddingVertical: SIZES.base,
-    paddingHorizontal: SIZES.padding / 2,
-    borderRadius: SIZES.radius,
-    borderBottomWidth: 2,
-    borderBottomColor: 'transparent',
-  },
-  sortButtonActive: {
-    borderBottomColor: COLORS.primary,
-  },
-  sortButtonText: {
-    ...FONTS.body4,
-    color: COLORS.textSecondary,
-  },
-  sortButtonTextActive: {
-    color: COLORS.primary,
-    fontWeight: 'bold',
-  },
-  genreSelectorContainer: { 
+const createThemedStyles = (colors: typeof import('../styles/theme').lightColors, SIZES: any, FONTS: any) => 
+  StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: colors.background,
+    },
+    innerContainer: {
+      flex: 1,
+    },
+    sortContainer: {
       flexDirection: 'row',
-      justifyContent: 'space-between',
-      alignItems: 'center',
+      justifyContent: 'space-around',
       paddingVertical: SIZES.padding / 2,
-      paddingHorizontal: SIZES.padding * 1.5, 
-      backgroundColor: COLORS.lightGray2, 
+      paddingHorizontal: SIZES.padding,
       borderBottomWidth: 1,
-      borderBottomColor: COLORS.lightGray, 
-  },
-  genreSelectorText: {
+      borderBottomColor: colors.lightGray,
+      backgroundColor: colors.white,
+    },
+    sortButton: {
+      paddingVertical: SIZES.base,
+      paddingHorizontal: SIZES.padding / 2,
+      borderRadius: SIZES.radius,
+      borderBottomWidth: 2,
+      borderBottomColor: 'transparent',
+    },
+    sortButtonActive: {
+      borderBottomColor: colors.primary,
+    },
+    sortButtonText: {
       ...FONTS.body4,
-      color: COLORS.textSecondary,
-  },
-  genreSelectorLink: {
-      ...FONTS.body4,
-      color: COLORS.primary,
-      fontWeight: '600',
-  }
-});
+      color: colors.textSecondary,
+    },
+    sortButtonTextActive: {
+      color: colors.primary,
+      fontWeight: 'bold',
+    },
+    genreSelectorContainer: { 
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        paddingVertical: SIZES.padding / 2,
+        paddingHorizontal: SIZES.padding * 1.5, 
+        backgroundColor: colors.lightGray2, 
+        borderBottomWidth: 1,
+        borderBottomColor: colors.lightGray, 
+    },
+    genreSelectorText: {
+        ...FONTS.body4,
+        color: colors.textSecondary,
+    },
+    genreSelectorLink: {
+        ...FONTS.body4,
+        color: colors.primary,
+        fontWeight: '600',
+    }
+  });
 
 export default PopularMoviesScreen; 

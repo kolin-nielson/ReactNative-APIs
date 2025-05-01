@@ -7,12 +7,15 @@ import ContentList from '../components/ContentList';
 import SearchBar from '../components/SearchBar';
 import { Movie, TVShow, ContentItem } from '../types/tmdb';
 import { RootStackParamList } from '../navigation/AppNavigator';
-import { FONTS, SIZES, COLORS } from '../styles/theme';
+import { FONTS, SIZES } from '../styles/theme';
+import { useTheme } from '../context/ThemeContext';
 import useDebounce from '../hooks/useDebounce';
 
 type SearchMoviesScreenNavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
 const SearchMoviesScreen: React.FC = () => {
+  const { colors } = useTheme();
+  const styles = createThemedStyles(colors, SIZES, FONTS);
   const [query, setQuery] = useState<string>('');
   const debouncedQuery = useDebounce(query, 500);
   const [results, setResults] = useState<ContentItem[]>([]);
@@ -117,7 +120,7 @@ const SearchMoviesScreen: React.FC = () => {
               {hasSearched ? 'No results found.' : 'Search for movies and TV shows.'}
           </Text>
       </View>
-  ), [hasSearched]);
+  ), [hasSearched, styles]);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -140,25 +143,26 @@ const SearchMoviesScreen: React.FC = () => {
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: COLORS.background,
-  },
-  listContainer: {
+const createThemedStyles = (colors: typeof import('../styles/theme').lightColors, SIZES: any, FONTS: any) => 
+  StyleSheet.create({
+    container: {
       flex: 1,
-  },
-  centeredMessage: {
-    flexGrow: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: SIZES.padding * 2,
-  },
-  infoText: {
-      ...FONTS.body3,
-      color: COLORS.textSecondary,
-      textAlign: 'center',
-  },
+      backgroundColor: colors.background,
+    },
+    listContainer: {
+        flex: 1,
+    },
+    centeredMessage: {
+      flexGrow: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      padding: SIZES.padding * 2,
+    },
+    infoText: {
+        ...FONTS.body3,
+        color: colors.textSecondary,
+        textAlign: 'center',
+    },
 });
 
 export default SearchMoviesScreen; 

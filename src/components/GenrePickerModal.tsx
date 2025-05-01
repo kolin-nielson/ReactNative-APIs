@@ -9,7 +9,8 @@ import {
     SafeAreaView
 } from 'react-native';
 import { Genre } from '../types/tmdb';
-import { FONTS, SIZES, COLORS } from '../styles/theme';
+import { FONTS, SIZES } from '../styles/theme';
+import { useTheme } from '../context/ThemeContext';
 import { Ionicons } from '@expo/vector-icons';
 
 interface GenrePickerModalProps {
@@ -27,6 +28,9 @@ const GenrePickerModal: React.FC<GenrePickerModalProps> = ({
     onSelectGenre,
     onClose,
 }) => {
+    const { colors } = useTheme();
+    const styles = createThemedStyles(colors, SIZES, FONTS);
+    
     const allGenresOption: Genre = { id: -1, name: 'All Genres' };
     const data = [allGenresOption, ...genres];
 
@@ -47,7 +51,7 @@ const GenrePickerModal: React.FC<GenrePickerModalProps> = ({
                 <Text style={[styles.itemText, isSelected && styles.itemTextSelected]}>
                     {item.name}
                 </Text>
-                {isSelected && <Ionicons name="checkmark-circle" size={24} color={COLORS.primary} />}
+                {isSelected && <Ionicons name="checkmark-circle" size={24} color={colors.primary} />}
             </TouchableOpacity>
         );
     };
@@ -64,7 +68,7 @@ const GenrePickerModal: React.FC<GenrePickerModalProps> = ({
                     <View style={styles.header}>
                         <Text style={styles.headerTitle}>Select Genre</Text>
                         <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-                             <Ionicons name="close-circle" size={30} color={COLORS.textSecondary} />
+                             <Ionicons name="close-circle" size={30} color={colors.textSecondary} />
                         </TouchableOpacity>
                     </View>
                     
@@ -80,63 +84,64 @@ const GenrePickerModal: React.FC<GenrePickerModalProps> = ({
     );
 };
 
-const styles = StyleSheet.create({
-    safeArea: {
-        flex: 1,
-        justifyContent: 'flex-end',
-        backgroundColor: 'rgba(0,0,0,0.5)',
-    },
-    modalView: {
-        backgroundColor: COLORS.background,
-        borderTopLeftRadius: SIZES.radius * 2,
-        borderTopRightRadius: SIZES.radius * 2,
-        paddingHorizontal: SIZES.padding,
-        paddingBottom: SIZES.padding * 2,
-        paddingTop: SIZES.padding,
-        maxHeight: '70%',
-        shadowColor: '#000',
-        shadowOffset: {
-            width: 0,
-            height: -2,
+const createThemedStyles = (colors: typeof import('../styles/theme').lightColors, SIZES: any, FONTS: any) => 
+    StyleSheet.create({
+        safeArea: {
+            flex: 1,
+            justifyContent: 'flex-end',
+            backgroundColor: 'rgba(0,0,0,0.5)',
         },
-        shadowOpacity: 0.1,
-        shadowRadius: 4,
-        elevation: 5,
-    },
-    header: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        borderBottomWidth: 1,
-        borderBottomColor: COLORS.lightGray,
-        paddingBottom: SIZES.padding,
-        marginBottom: SIZES.padding,
-    },
-    headerTitle: {
-        ...FONTS.h3,
-        color: COLORS.textPrimary,
-    },
-    closeButton: {
-        padding: SIZES.base / 2,
-    },
-    list: {
-    },
-    itemContainer: {
-        paddingVertical: SIZES.padding * 1.5,
-        borderBottomWidth: 1,
-        borderBottomColor: COLORS.lightGray2,
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-    },
-    itemText: {
-        ...FONTS.body3,
-        color: COLORS.textPrimary,
-    },
-    itemTextSelected: {
-        color: COLORS.primary,
-        fontWeight: 'bold',
-    },
+        modalView: {
+            backgroundColor: colors.background,
+            borderTopLeftRadius: SIZES.radius * 2,
+            borderTopRightRadius: SIZES.radius * 2,
+            paddingHorizontal: SIZES.padding,
+            paddingBottom: SIZES.padding * 2,
+            paddingTop: SIZES.padding,
+            maxHeight: '70%',
+            shadowColor: colors.black,
+            shadowOffset: {
+                width: 0,
+                height: -2,
+            },
+            shadowOpacity: 0.1,
+            shadowRadius: 4,
+            elevation: 5,
+        },
+        header: {
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            borderBottomWidth: 1,
+            borderBottomColor: colors.lightGray,
+            paddingBottom: SIZES.padding,
+            marginBottom: SIZES.padding,
+        },
+        headerTitle: {
+            ...FONTS.h3,
+            color: colors.textPrimary,
+        },
+        closeButton: {
+            padding: SIZES.base / 2,
+        },
+        list: {
+        },
+        itemContainer: {
+            paddingVertical: SIZES.padding * 1.5,
+            borderBottomWidth: 1,
+            borderBottomColor: colors.lightGray2,
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+        },
+        itemText: {
+            ...FONTS.body3,
+            color: colors.textPrimary,
+        },
+        itemTextSelected: {
+            color: colors.primary,
+            fontWeight: 'bold',
+        },
 });
 
 export default GenrePickerModal; 

@@ -3,7 +3,8 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator, NativeStackScreenProps } from '@react-navigation/native-stack';
 import { createBottomTabNavigator, BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
-import { FONTS, COLORS } from '../styles/theme';
+import { FONTS } from '../styles/theme';
+import { useTheme } from '../context/ThemeContext';
 
 import PopularMoviesScreen from '../screens/PopularMoviesScreen';
 import PopularTVShowsScreen from '../screens/PopularTVShowsScreen';
@@ -37,16 +38,17 @@ const Tab = createBottomTabNavigator<TabParamList>();
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 const TabNavigator: React.FC = () => {
+  const { colors } = useTheme();
+
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
-        tabBarActiveTintColor: COLORS.primary,
-        tabBarInactiveTintColor: COLORS.gray,
+        tabBarActiveTintColor: colors.primary,
+        tabBarInactiveTintColor: colors.gray,
         tabBarStyle: {
-            backgroundColor: COLORS.white,
-            borderTopColor: COLORS.lightGray,
+            backgroundColor: colors.white,
+            borderTopColor: colors.lightGray,
             paddingTop: 4,
-            height: 55,
             paddingBottom: 4,
         },
         tabBarLabelStyle: {
@@ -55,13 +57,13 @@ const TabNavigator: React.FC = () => {
             marginTop: -2,
         },
         headerStyle: { 
-            backgroundColor: COLORS.white,
+            backgroundColor: colors.white,
             shadowOpacity: 0.1,
             elevation: 2,
             borderBottomWidth: 0,
         },
-        headerTintColor: COLORS.textPrimary,
-        headerTitleStyle: { ...FONTS.h3, color: COLORS.textPrimary },
+        headerTintColor: colors.textPrimary,
+        headerTitleStyle: { ...FONTS.h3, color: colors.textPrimary },
         tabBarIcon: ({ focused, color, size }) => {
           let iconName: keyof typeof Ionicons.glyphMap | undefined;
           const iconSize = focused ? size * 1.0 : size * 0.9;
@@ -92,20 +94,22 @@ const TabNavigator: React.FC = () => {
 };
 
 const AppNavigator: React.FC = () => {
+  const { colors } = useTheme();
+
   return (
     <NavigationContainer>
       <Stack.Navigator
         screenOptions={{
             headerStyle: { 
-                backgroundColor: COLORS.white,
+                backgroundColor: colors.white,
                 shadowOpacity: 0.1,
                 elevation: 2,
                 borderBottomWidth: 0,
             },
-            headerTintColor: COLORS.primary,
-            headerTitleStyle: { ...FONTS.h3, color: COLORS.textPrimary },
+            headerTintColor: colors.primary,
+            headerTitleStyle: { ...FONTS.h3, color: colors.textPrimary },
             headerBackTitleVisible: false,
-            contentStyle: { backgroundColor: COLORS.background },
+            contentStyle: { backgroundColor: colors.background },
         }}
       >
         <Stack.Screen
